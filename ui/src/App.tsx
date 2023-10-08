@@ -2,7 +2,7 @@ import KoinuBaseGoerli from "./providers/KoinuBaseGoerli"
 
 const App = () => {
   return (
-    <div className='flex justify-center items-center h-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black'>
+    <div className='flex justify-center items-center h-screen bg-gradient-to-r from-purple-800 via-violet-900 to-purple-800'>
       <KoinuBaseGoerli />
     </div>
   )
