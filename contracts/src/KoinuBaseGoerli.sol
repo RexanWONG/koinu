@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.20;
 
-import {AxelarExecutable} from "@axelar-network-axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol";
-import {IAxelarGateway} from "@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGateway.sol";
-import {IERC20} from "@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IERC20.sol";
-import {IAxelarGasService} from "@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGasService.sol";
+import {AxelarExecutable} from '@axelar-network-axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol';
+import {IAxelarGateway} from '@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGateway.sol';
+import {IERC20} from '@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IERC20.sol';
+import {IAxelarGasService} from '@axelar-network-axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGasService.sol';
 
-contract Koinu is AxelarExecutable {
+contract KoinuBaseGoerli is AxelarExecutable {
     IAxelarGasService public immutable gasService;
 
     constructor(address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
@@ -16,11 +16,11 @@ contract Koinu is AxelarExecutable {
     function sendToDifferentChain(
         string memory destinationChain,
         string memory destinationContractAddress,
-        string memory symbol,
+        string memory symbol, 
         uint256 amount
     ) external payable {
         // Require a gas payment for the transaction
-        require(msg.value > 0, "Gas payment is required");
+        require(msg.value > 0, 'Gas payment is required');
 
         // Get the token address associated with the provided symbol
         address tokenAddress = gateway.tokenAddresses(symbol);
