@@ -9,7 +9,6 @@ interface ChainButtonProps {
     chainName,
     chainBalance
   }) => {
-    const wei = 1000000000000000000
     return (
       <div className="flex flex-row items-center justify-start gap-3 hover:cursor-pointer">
         <img
@@ -23,7 +22,7 @@ interface ChainButtonProps {
               Optimism Goerli
           </h4>
           <p className=" text-gray-400 text-[14px]">
-              {(chainBalance/wei).toFixed(3)} ETH
+              {chainBalance} ETH
             </p>
         </div>
       </div>

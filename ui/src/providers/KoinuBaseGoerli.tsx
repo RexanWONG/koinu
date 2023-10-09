@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
+import { formatBalance } from '../utils';
 
 import Box from '../components/Box'
 import BoxVerticalLine from '../components/BoxVerticalLine'
 import Title from '../components/Title'
 import ChainButton from '../components/ChainButton';
 import Optimism from '../assets/Optimism.png';
+import Base from '../assets/Base.png';
+import RightSideDefaultColumn from '../components/RightSideDefaultColumn';
 
 interface KoinuBaseGoerliProps {
   signer: any;
@@ -61,7 +64,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
             <ChainButton 
               chainImage={Optimism}
               chainName={'Optimism Goerli'}
-              chainBalance={optimismGoerliBalance}
+              chainBalance={formatBalance(optimismGoerliBalance)}
             />
           </div>
         </div>
@@ -69,7 +72,17 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
 
       <BoxVerticalLine />
 
-      <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center"></div>
+      <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center">
+        {isOptimismGoerliSelected? (
+          <div />
+        ) : (
+          <RightSideDefaultColumn 
+            chainImage={Base}
+            chainName={'Base Goerli'}
+            chainBalance={formatBalance(baseGoerliBalance)}
+          />
+        )}
+      </div>
     </Box>
   )
 }
