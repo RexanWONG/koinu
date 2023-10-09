@@ -154,7 +154,10 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
                       newBalance={Number(Number(formatBalance(baseGoerliBalance) + Number(inputValue.optimismGoerliBridgeAmount)).toFixed(3))}
                     />
                   </div>
-                </div>
+              </div>
+              <button className="font-extrabold bg-white hover:bg-gradient-to-l from-orange-500 to-yellow-300 hover:animate-text w-[350px] transform hover:scale-105 duration-1000 rounded-xl p-2 mt-10">
+                Send to OP Goerli!
+              </button>
             </div>
           </div>
         ) : (
