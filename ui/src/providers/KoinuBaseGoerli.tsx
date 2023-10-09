@@ -9,6 +9,7 @@ import ChainButton from '../components/ChainButton';
 import Optimism from '../assets/Optimism.png';
 import Base from '../assets/Base.png';
 import RightSideDefaultColumn from '../components/RightSideDefaultColumn';
+import ActionBar from '../components/ActionBar';
 
 interface KoinuBaseGoerliProps {
   signer: any;
@@ -74,7 +75,13 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
 
       <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center">
         {isOptimismGoerliSelected? (
-          <div />
+          <div className='flex flex-col items-center justify-center'>
+            <ActionBar 
+              chainName={'Optimism Goerli'}
+              action1={() => setIsOptimismGoerliSelected(false)}
+              action2={() => {}}
+            />
+          </div>
         ) : (
           <RightSideDefaultColumn 
             chainImage={Base}
