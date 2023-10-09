@@ -32,7 +32,7 @@ const App = () => {
             signer={provider.getSigner()}
           />
         ) : (
-          <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black text-white focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
+          <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
             Connect Wallet
           </button>
         )}
