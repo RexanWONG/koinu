@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
+import { Network, Alchemy } from 'alchemy-sdk';
+
 import Box from '../components/Box'
 import BoxVerticalLine from '../components/BoxVerticalLine'
 import Title from '../components/Title'
-
-import { useEffect, useState } from 'react';
-import { Network, Alchemy } from 'alchemy-sdk';
+import ChainButton from '../components/ChainButton';
+import Optimism from '../assets/Optimism.png';
 
 interface KoinuBaseGoerliProps {
   signer: any;
@@ -53,6 +55,16 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
     <Box>
       <div className="absolute left-0 top-0 bottom-0 w-1/3 flex flex-col items-start justify-start p-6">
         <Title />
+
+        <div className='mt-6'>
+          <div onClick={() => setIsOptimismGoerliSelected(true)} className='p-1 rounded-lg hover:bg-gray-900'>
+            <ChainButton 
+              chainImage={Optimism}
+              chainName={'Optimism Goerli'}
+              chainBalance={optimismGoerliBalance}
+            />
+          </div>
+        </div>
       </div>
 
       <BoxVerticalLine />
