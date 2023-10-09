@@ -24,6 +24,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
     optimismGoerliBridgeAmount: Number(0)
   });
 
+  const [isAllDataLoaded, setIsAllDataLoaded] = useState(false)
   const [isOptimismGoerliSelected, setIsOptimismGoerliSelected] = useState(false);
   
   const OP_GOERLI_API_KEY = import.meta.env.VITE_OP_GOERLI_API_KEY;
@@ -69,14 +70,18 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
   useEffect(() => {
     const fetchData = async () => {
         await fetchAddress();
-        fetchBalance(alchemyOpGoerliProvider, setOptimismGoerliBalance, connectedAddress);
-        fetchBalance(alchemyBaseGoerliProvider, setBaseGoerliBalance, connectedAddress);
+        await fetchBalance(alchemyOpGoerliProvider, setOptimismGoerliBalance, connectedAddress);
+        await fetchBalance(alchemyBaseGoerliProvider, setBaseGoerliBalance, connectedAddress);
+
+        setTimeout(() => {
+          setIsAllDataLoaded(true);
+        }, 750);
     }
     fetchData();
-  }, [connectedAddress, setConnectedAddress, signer]);
+  }, [isAllDataLoaded, setIsAllDataLoaded, connectedAddress, setConnectedAddress, signer]);
   
   return (
-    <Box>
+    <Box isAllDataLoaded={isAllDataLoaded}>
       <div className="absolute left-0 top-0 bottom-0 w-1/3 flex flex-col items-start justify-start p-6">
         <Title />
 
