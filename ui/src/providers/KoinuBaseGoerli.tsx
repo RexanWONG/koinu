@@ -1,5 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
+import { ethers } from 'ethers';
 import { formatBalance } from '../utils';
 
 import Box from '../components/Box'
@@ -12,11 +13,16 @@ import RightSideDefaultColumn from '../components/RightSideDefaultColumn';
 import ActionBar from '../components/ActionBar';
 import TransactionStatistics from '../components/TransactionStatistics';
 
+import { baseGoerliDeployedAddress, opGoerliDeployedAddress } from '../constants';
+import koinuBaseGoerliAbi from '../constants/KoinuBaseGoerli.json'
+
 interface KoinuBaseGoerliProps {
   signer: any;
 }
 
 const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
+  const koinuBaseGoerliConntract = new ethers.Contract(baseGoerliDeployedAddress, koinuBaseGoerliAbi.abi, signer);
+
   const [connectedAddress, setConnectedAddress] = useState('')
   const [baseGoerliBalance, setBaseGoerliBalance] = useState(0)
   const [optimismGoerliBalance, setOptimismGoerliBalance] = useState(0);
@@ -66,6 +72,28 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
       }));
     }
   };
+
+  const handleSendToDifferentChain = async (chainName: string) => {
+    try {
+      if (chainName === 'optimism') {
+        const send = await koinuBaseGoerliConntract.sendToDifferentChain(
+          chainName,
+          opGoerliDeployedAddress,
+          'aUSDC',
+          inputValue.optimismGoerliBridgeAmount,
+          {
+            value: ethers.utils.parseEther('0.08')
+          }
+        )
+
+        await send.wait()
+        console.log(send)
+      }
+    
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,7 +183,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
                     />
                   </div>
               </div>
-              <button className="font-extrabold bg-white hover:bg-gradient-to-l from-orange-500 to-yellow-300 hover:animate-text w-[350px] transform hover:scale-105 duration-1000 rounded-xl p-2 mt-10">
+              <button onClick={() => handleSendToDifferentChain('optimism')} className="font-extrabold bg-white hover:bg-gradient-to-l from-white via-orange-500 to-yellow-300 hover:animate-text w-[350px] transition-all duration-150 ease-in-out rounded-xl p-2 mt-10">
                 Send to OP Goerli!
               </button>
             </div>

@@ -17,7 +17,7 @@ const ActionBar: React.FC<ActionBarProps> = ({
         <IoChevronBackOutline size='25px'/>
       </div>
 
-      <h4 className="scroll-m-20 text-white text-xl font-semibold tracking-tight">
+      <h4 className="scroll-m-20 text-white text-xl font-extrabold tracking-tight">
         {chainName}
       </h4>
 

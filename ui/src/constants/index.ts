@@ -1,0 +1,2 @@
+export const baseGoerliDeployedAddress = '0x07EAc99586339dAF2cec9aDd737Ec7EaA9B0F38B';
+export const opGoerliDeployedAddress = '0x1dc5e31244594077B0Df557a449b34F0677E214B';
