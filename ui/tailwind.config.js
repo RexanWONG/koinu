@@ -8,6 +8,7 @@ export default {
     extend: {
       'animation': {
         'text':'text 5s ease infinite',
+        'run': 'slide-right 2s infinite',
       },
       'keyframes': {
           'text': {
@@ -19,6 +20,11 @@ export default {
                 'background-size':'200% 200%',
                   'background-position': 'right center'
               }
+          },
+          'slide-right': {
+            '0%': { transform: 'translateX(0)' },
+            '50%': { transform: 'translateX(200px)' },
+            '100%': { transform: 'translateX(0)' },
           },
       }
     },

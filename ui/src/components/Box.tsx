@@ -1,5 +1,5 @@
 import React from 'react';
-import LoadingCircle from './LoadingCircle';
+import DogAnimation from './DogAnimation';
 
 interface BoxProps {
   isAllDataLoaded: boolean;
@@ -12,7 +12,7 @@ const Box: React.FC<BoxProps> = ({ isAllDataLoaded, children }) => {
       className="relative bg-black border border-gray-600 rounded-3xl h-[550px] w-[800px] flex items-center justify-center hover:shadow-xl transition-shadow duration-500 ease-in-out"
       style={{ willChange: 'box-shadow' }}
     >
-      {isAllDataLoaded ? children : <LoadingCircle />}
+      {isAllDataLoaded ? children : <DogAnimation />}
     </div>
   );
 };

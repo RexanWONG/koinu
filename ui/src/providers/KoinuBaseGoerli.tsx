@@ -22,7 +22,7 @@ import TransactionStatistics from '../components/TransactionStatistics';
 
 import { baseGoerliDeployedAddress, opGoerliDeployedAddress } from '../constants';
 import koinuBaseGoerliAbi from '../constants/KoinuBaseGoerli.json'
-import LoadingCircle from '../components/LoadingCircle';
+import DogAnimation from '../components/DogAnimation';
 
 interface KoinuBaseGoerliProps {
   signer: any;
@@ -35,6 +35,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
   const [baseGoerliBalance, setBaseGoerliBalance] = useState(0)
   const [optimismGoerliBalance, setOptimismGoerliBalance] = useState(0);
   const [gasFee, setGasFee] = useState(0)
+  const [txHash, setTxHash] = useState('')
   const [inputValue, setInputValue] = useState({
     optimismGoerliBridgeAmount: Number(0)
   });
@@ -132,12 +133,11 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
           }
         )
 
-        console.log(send)
+        setTxHash(send.hash)
         await send.wait()
 
         setIsSendToDifferentChainLoading(false)
         setIsSentToDifferentChain(true)
-        console.log(send)
       }
     
     } catch (error) {
@@ -184,11 +184,21 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
 
       <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center">
         {isOptimismGoerliSelected? (
-          isSendToDifferentChainLoading ? (
+          !isSendToDifferentChainLoading ? (
             <div className='flex flex-col items-center justify-center'>
-              <LoadingCircle />
+              <DogAnimation />
               <p className="text-center text-gray-400 mt-10">
                 Sending {inputValue.optimismGoerliBridgeAmount} ETH to Optimism Goerli
+              </p>
+
+              <p className='text-white font-bold mt-2'>Tx Hash : {txHash}</p>
+
+              <p className='text-white mt-10'>
+                Monitor your transaction on etherscan
+              </p>
+
+              <p className='text-white mt-2'>
+                Monitor your transaction on axelar testnet explorer
               </p>
             </div>
           ) : (
