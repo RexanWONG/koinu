@@ -7,7 +7,6 @@ import {
   EvmChain,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
-import truncateEthAddress from 'truncate-eth-address'
 
 import { formatBalance } from '../utils';
 
@@ -23,9 +22,6 @@ import TransactionStatistics from '../components/TransactionStatistics';
 
 import { baseGoerliDeployedAddress, opGoerliDeployedAddress } from '../constants';
 import koinuBaseGoerliAbi from '../constants/KoinuBaseGoerli.json'
-import DogAnimation from '../components/DogAnimation';
-import CheckAnimation from '../components/CheckAnimation';
-import CopyToClipboard from '../components/CopyToClipboard';
 import ProcessState from '../components/ProcessState';
 
 interface KoinuBaseGoerliProps {
@@ -193,6 +189,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
               isSent={false}
               bridgeAmount={inputValue.optimismGoerliBridgeAmount}
               txHash={txHash}
+              backAction={() => {}}
             />
           ) : (
             isSentToDifferentChain ? (
@@ -200,6 +197,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
                 isSent={true}
                 bridgeAmount={inputValue.optimismGoerliBridgeAmount}
                 txHash={txHash}
+                backAction={() => setIsSentToDifferentChain(false)}
               />
             ) : (
               <div className='flex flex-col items-center justify-center'>

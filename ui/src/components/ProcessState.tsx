@@ -7,15 +7,17 @@ interface ProcessStateProps {
     isSent: boolean;
     bridgeAmount: number;
     txHash: string;
+    backAction: () => void
 }
 
 const ProcessState: React.FC<ProcessStateProps> = ({
     isSent,
     bridgeAmount,
-    txHash
+    txHash,
+    backAction
 }) => {
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center mt-2'>
         {isSent? (
             <div className='flex flex-col items-center justify-center'>
                 <CheckAnimation />
@@ -35,6 +37,10 @@ const ProcessState: React.FC<ProcessStateProps> = ({
                 <p className='text-white mt-2'>
                 🦴 View your transaction on axelar testnet explorer
                 </p>
+
+                <button onClick={backAction} className="font-extrabold bg-white hover:bg-gradient-to-l from-white via-orange-500 to-yellow-300 hover:animate-text w-[350px] transition-all duration-150 ease-in-out rounded-xl p-2 mt-28">
+                    Great, now go back!
+                </button>
             </div>
         ) : (
             <div className='flex flex-col items-center justify-center'>
