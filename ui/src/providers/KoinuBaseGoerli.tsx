@@ -26,6 +26,7 @@ import koinuBaseGoerliAbi from '../constants/KoinuBaseGoerli.json'
 import DogAnimation from '../components/DogAnimation';
 import CheckAnimation from '../components/CheckAnimation';
 import CopyToClipboard from '../components/CopyToClipboard';
+import ProcessState from '../components/ProcessState';
 
 interface KoinuBaseGoerliProps {
   signer: any;
@@ -188,44 +189,18 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
       <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center">
         {isOptimismGoerliSelected? (
           isSendToDifferentChainLoading ? (
-            <div className='flex flex-col items-center justify-center'>
-              <DogAnimation />
-              <p className="text-center text-gray-400 mt-10">
-                Sending {inputValue.optimismGoerliBridgeAmount} ETH to Optimism Goerli 
-              </p>
-
-              <p className='text-white font-bold mt-2'>
-                  🐾 Tx Hash : {truncateEthAddress(txHash)} <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
-              </p>
-
-              <p className='text-white mt-10'>
-                🦴 Monitor your transaction on etherscan
-              </p>
-
-              <p className='text-white mt-2'>
-                🦴 Monitor your transaction on axelar testnet explorer
-              </p>
-            </div>
+            <ProcessState 
+              isSent={false}
+              bridgeAmount={inputValue.optimismGoerliBridgeAmount}
+              txHash={txHash}
+            />
           ) : (
             isSentToDifferentChain ? (
-              <div className='flex flex-col items-center justify-center'>
-                <CheckAnimation />
-                <p className="text-center text-gray-400 mt-10">
-                  🟢 Sent {inputValue.optimismGoerliBridgeAmount} ETH to Optimism Goerli!
-                </p>
-
-                <p className='text-white font-bold mt-2'>
-                  🐾 Tx Hash : {truncateEthAddress(txHash)} <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
-                </p>
-
-                <p className='text-white mt-10'>
-                  🦴 View your transaction on etherscan
-                </p>
-
-                <p className='text-white mt-2'>
-                  🦴 View your transaction on axelar testnet explorer
-                </p>
-              </div>
+              <ProcessState 
+                isSent={true}
+                bridgeAmount={inputValue.optimismGoerliBridgeAmount}
+                txHash={txHash}
+              />
             ) : (
               <div className='flex flex-col items-center justify-center'>
                   <ActionBar 
