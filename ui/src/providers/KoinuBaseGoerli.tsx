@@ -7,7 +7,6 @@ import {
   EvmChain,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
-
 import { formatBalance } from '../utils';
 
 import Box from '../components/Box'
@@ -111,8 +110,8 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
         gmpParams
       );
   
-      if (typeof gas !== 'string' && gas.baseFee) {
-        setGasFee(Number(ethers.utils.formatUnits(gas.baseFee)));
+      if (typeof gas !== 'string' && gas.baseFee && gas.executionFee) {
+        setGasFee(Number(ethers.utils.formatUnits(Number(gas.baseFee) + Number(gas.executionFee))));
       } 
     } catch (error) {
       console.error('Failed to fetch the gas fee');
@@ -151,7 +150,6 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
         await fetchAddress();
         await fetchBalance(alchemyOpGoerliProvider, setOptimismGoerliBalance, connectedAddress);
         await fetchBalance(alchemyBaseGoerliProvider, setBaseGoerliBalance, connectedAddress);
-        await getEstimatedGasOpGoerli()
 
         setTimeout(() => {
           setIsAllDataLoaded(true);

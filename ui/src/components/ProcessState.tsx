@@ -30,13 +30,13 @@ const ProcessState: React.FC<ProcessStateProps> = ({
                 <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
                 </p>
 
-                <p className='text-white mt-10'>
+                <a href={`https://goerli.basescan.org/tx/${txHash}`} target="_blank" className='text-white hover:underline mt-10'>
                 🦴 View your transaction on etherscan
-                </p>
+                </a>
 
-                <p className='text-white mt-2'>
+                <a href={`https://testnet.axelarscan.io/gmp/${txHash}`} target="_blank"className='text-white hover:underline mt-2'>
                 🦴 View your transaction on axelar testnet explorer
-                </p>
+                </a>
 
                 <button onClick={backAction} className="font-extrabold bg-white hover:bg-gradient-to-l from-white via-orange-500 to-yellow-300 hover:animate-text w-[350px] transition-all duration-150 ease-in-out rounded-xl p-2 mt-28">
                     Great, now go back!
@@ -54,13 +54,13 @@ const ProcessState: React.FC<ProcessStateProps> = ({
                     <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
                 </p>
 
-                <p className='text-white mt-10'>
-                    🦴 Monitor your transaction on etherscan
-                </p>
+                <a href={`https://goerli.basescan.org/tx/${txHash}`} target="_blank" className='text-white hover:underline mt-10'>
+                🦴 Monitor your transaction on etherscan
+                </a>
 
-                <p className='text-white mt-2'>
-                    🦴 Monitor your transaction on axelar testnet explorer
-                </p>
+                <a href={`https://testnet.axelarscan.io/gmp/${txHash}`} target="_blank"className='text-white hover:underline mt-2'>
+                🦴 Monitor your transaction on axelar testnet explorer
+                </a>
             </div>
         )}
     </div>
