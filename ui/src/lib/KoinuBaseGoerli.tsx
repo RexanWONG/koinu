@@ -2,9 +2,11 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 import { 
+  AxelarGMPRecoveryAPI,
   AxelarQueryAPI,
   Environment,
   EvmChain,
+  GMPStatusResponse,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
 import { formatBalance } from '../utils';
@@ -50,7 +52,11 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
   const alchemyOpGoerliProvider = new Alchemy({ apiKey: OP_GOERLI_API_KEY, network: Network.OPT_GOERLI });
   const alchemyBaseGoerliProvider = new Alchemy({ apiKey: BASE_GOERLI_API_KEY, network: Network.BASE_GOERLI });
 
-  const axelarSdk = new AxelarQueryAPI({
+  const axelarGasSdk = new AxelarQueryAPI({
+    environment: Environment.TESTNET,
+  });
+
+  const axelarGmpSdk = new AxelarGMPRecoveryAPI({
     environment: Environment.TESTNET,
   });
 
@@ -100,7 +106,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
         tokenSymbol: "aUSDC"
       };
   
-      const gas = await axelarSdk.estimateGasFee(
+      const gas = await axelarGasSdk.estimateGasFee(
         EvmChain.BASE,
         EvmChain.OPTIMISM,
         GasToken.ETH,
@@ -117,6 +123,15 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
       console.error('Failed to fetch the gas fee');
     }
   };
+
+  const queryAxelarTx = async (txHash: string) => {
+    try {
+      const txStatus: GMPStatusResponse = await axelarGmpSdk.queryTransactionStatus(txHash)
+      console.log(txStatus)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const handleSendToDifferentChain = async (chainName: string) => {
     try {
@@ -147,6 +162,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (signer) {
         await fetchAddress();
         await fetchBalance(alchemyOpGoerliProvider, setOptimismGoerliBalance, connectedAddress);
         await fetchBalance(alchemyBaseGoerliProvider, setBaseGoerliBalance, connectedAddress);
@@ -154,6 +170,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
         setTimeout(() => {
           setIsAllDataLoaded(true);
         }, 750);
+      }
     }
     fetchData();
   }, [isAllDataLoaded, setIsAllDataLoaded, connectedAddress, setConnectedAddress, signer]);
@@ -161,6 +178,10 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
   useEffect(() => {
     getEstimatedGasOpGoerli();
   }, [inputValue.optimismGoerliBridgeAmount]);
+
+  useEffect(() => {
+    queryAxelarTx(txHash);
+  }, [txHash]);
   
   return (
     <Box isAllDataLoaded={isAllDataLoaded}>

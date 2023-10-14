@@ -1,6 +1,5 @@
-import KoinuBaseGoerli from "./lib/KoinuBaseGoerli"
-
-import { ethers } from 'ethers'
+import { KoinuBaseGoerliProvider } from 'koinu'
+import { ethers }  from 'ethers'
 import { useEffect, useState } from 'react';
 
 const App = () => {
@@ -26,9 +25,13 @@ const App = () => {
   }, [window.ethereum, isWalletConnected, setIsWalletConnected])
 
   return (
-    <div className='flex justify-center items-center h-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500 to-yellow-300'>
+    <div className='flex flex-col items-center justify-center mt-16'>
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Koinu Tests
+      </h1>
+
       {isWalletConnected ? (
-          <KoinuBaseGoerli 
+          <KoinuBaseGoerliProvider 
             signer={provider.getSigner()}
           />
         ) : (
