@@ -1,1 +1,0 @@
-export { default as KoinuBaseGoerliProvider } from './lib/KoinuBaseGoerli'

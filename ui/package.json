@@ -1,17 +1,30 @@
 {
   "name": "koinu",
   "description": "npm library that provides hassle-free cross-chain token transfers in dapps",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.e.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
   "files": [
-    "src/**/*"
+    "/dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "bunx --bun vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "serve": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prepare": "npm run build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -37,6 +50,7 @@
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.6.0"
   }
 }

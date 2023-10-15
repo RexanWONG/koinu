@@ -6,5 +6,9 @@
     {
         "chainName": "Optimism Goerli",
         "address": "0x1dc5e31244594077B0Df557a449b34F0677E214B"
+    },
+    {
+        "chainName": "Scroll Sepolia",
+        "address": "0x359B573359DDaF99856F2F036894A5DaD30d55C4"
     }
 ]

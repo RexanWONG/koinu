@@ -104,7 +104,7 @@ const KoinuBaseGoerli: React.FC<KoinuBaseGoerliProps> = ({ signer }) => {
         destinationContractAddress: opGoerliDeployedAddress,
         sourceContractAddress: baseGoerliDeployedAddress,
         tokenSymbol: "aUSDC"
-      };
+      }; 
   
       const gas = await axelarGasSdk.estimateGasFee(
         EvmChain.BASE,
