@@ -10,5 +10,9 @@
     {
         "chainName": "Scroll Sepolia",
         "address": "0x359B573359DDaF99856F2F036894A5DaD30d55C4"
+    },
+    {
+        "chainName": "Mantle Testnet",
+        "address": "0x359B573359DDaF99856F2F036894A5DaD30d55C4"
     }
 ]
