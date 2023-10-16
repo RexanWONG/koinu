@@ -29,7 +29,10 @@ interface KoinuScrollSepoliaProps {
 }
 
 const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
-  const koinuScrollSepoliaContract = new ethers.Contract(scrollSepoliaDeployedAddress, koinuScrollSepoliaAbi.abi, signer);
+  const koinuScrollSepoliaContract = new ethers.Contract(
+    scrollSepoliaDeployedAddress, 
+    koinuScrollSepoliaAbi.abi, signer
+  );
 
   const [connectedAddress, setConnectedAddress] = useState('')
   const [scrollSepoliaBalance, setScrollSepoliaBalance] = useState(0)
@@ -41,7 +44,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
   });
 
   const [isAllDataLoaded, setIsAllDataLoaded] = useState(false)
-  const [isOptimismGoerliSelected, setIsOptimismGoerliSelected] = useState(false);
+  const [isMantleTestnetSelected, setIsMantleTestnetSelected] = useState(false);
   const [isSendToDifferentChainLoading, setIsSendToDifferentChainLoading] = useState(false)
   const [isSentToDifferentChain, setIsSentToDifferentChain] = useState(false)
 
@@ -78,14 +81,15 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
         signer,
         signer.getAddress()
       )
-      console.log(balance)
       setScrollSepoliaBalance(balance)
+
     } else if (chainName === 'mantle') {
       const balance = await fetchAUSDCBalance(
         chainName,
         signer,
         connectedAddress
       )
+      console.log("Mantle :", balance)
       setMantleTestnetBalance(balance)
     }
   }
@@ -168,6 +172,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
       if (signer) {
         await fetchAddress();
         await fetchBalances('scroll')
+        await fetchBalances('mantle')
 
         setTimeout(() => {
           setIsAllDataLoaded(true);
@@ -191,7 +196,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
         <Title />
 
         <div className='mt-6'>
-          <div onClick={() => setIsOptimismGoerliSelected(true)} className='p-1 rounded-lg hover:bg-gray-900'>
+          <div onClick={() => setIsMantleTestnetSelected(true)} className='p-1 rounded-lg hover:bg-gray-900'>
             <ChainButton 
               chainImage={Mantle}
               chainName={'Mantle Testnet'}
@@ -204,7 +209,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
       <BoxVerticalLine />
 
       <div className="absolute left-1/3 top-0 bottom-0 w-2/3 flex flex-col items-center justify-center">
-        {isOptimismGoerliSelected? (
+        {isMantleTestnetSelected? (
           isSendToDifferentChainLoading ? (
             <ProcessState 
               isSent={false}
@@ -224,7 +229,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
               <div className='flex flex-col items-center justify-center'>
                   <ActionBar 
                     chainName={'Mantle Testnet'}
-                    action1={() => setIsOptimismGoerliSelected(false)}
+                    action1={() => setIsMantleTestnetSelected(false)}
                     action2={() => {}}
                   />
 

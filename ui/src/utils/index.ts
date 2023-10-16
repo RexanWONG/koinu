@@ -32,10 +32,11 @@ export const fetchAUSDCBalance = async (chainName: string, signer: any, address:
         }
 
         if (chainName === 'mantle') {
+            const mantleTestnetProvider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.mantle.xyz')
             const ausdcContract = new ethers.Contract(
                 mantleTestnetAUSDCAddress, 
                 ERC20_ABI, 
-                signer
+                mantleTestnetProvider
             );
 
             const balance = await ausdcContract.balanceOf(address);
