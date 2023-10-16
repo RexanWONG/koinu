@@ -17,11 +17,11 @@ const RightSideDefaultColumn: React.FC<RightSideDefaultColumnProps> = ({
           className='w-1/6 object-contain'
         />
         <h4 className="scroll-m-20 text-white text-xl font-semibold tracking-tight mt-16">
-            You currently have {chainBalance} ETH on {chainName}
+            You currently have {chainBalance} aUSDC on {chainName}
         </h4>
 
-        <p className="text-center text-gray-400 [&:not(:first-child)]:mt-3 max-w-[400px]">
-          If you're low on ETH in {chainName}, transfer some ETH from another chain by selecting a chain on the left
+        <p className="text-center text-gray-400 [&:not(:first-child)]:mt-3 max-w-[450px]">
+          If you're low on aUSDC in {chainName}, transfer some aUSDC from another chain by selecting a chain on the left
         </p>
     </div>
   )

@@ -19,7 +19,7 @@ interface ChainButtonProps {
   
         <div className="flex flex-col">
           <h4 className="scroll-m-20 text-white text-[15px] font-semibold tracking-tight">
-              Optimism Goerli
+              {chainName}
           </h4>
           <p className=" text-gray-400 text-[14px]">
               {chainBalance} ETH

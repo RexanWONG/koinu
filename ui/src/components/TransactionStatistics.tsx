@@ -24,16 +24,16 @@ const TransactionStatistics: React.FC<TransactionStatisticsProps> = ({
             Original balance
             </p>
             <p className='text-white'>
-            {originalBalance} ETH
+            {originalBalance} aUSDC
             </p>
         </div>
 
         <div className='flex flex-col items-start justify-start ml-10'>
             <p className='text-gray-400 text-xs'>
-            New balance
+                New balance
             </p>
             <p className='text-white'>
-                {newBalance} ETH
+                {newBalance} aUSDC
             </p>
         </div>
     </div>
