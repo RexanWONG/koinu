@@ -18,6 +18,15 @@ export const formatAUSDCBalance = (balance: number) => {
     return Number((balance/USDC_DECIMALS).toFixed(3))
 }
 
+export const switchToMantleTestnet = async (signer: any) => {
+    try {
+        const newProvider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.mantle.xyz')
+        return newProvider.getSigner(await signer.getAddress())
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 export const fetchAUSDCBalance = async (chainName: string, signer: any, address: string) => {
     try {
         if (chainName === 'scroll') {

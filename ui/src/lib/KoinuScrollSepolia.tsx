@@ -8,7 +8,7 @@ import {
   GMPStatusResponse,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
-import { fetchAUSDCBalance, formatAUSDCBalance } from '../utils';
+import { fetchAUSDCBalance, formatAUSDCBalance, switchToMantleTestnet } from '../utils';
 
 import Box from '../components/Box'
 import BoxVerticalLine from '../components/BoxVerticalLine'
@@ -21,7 +21,7 @@ import ActionBar from '../components/ActionBar';
 import TransactionStatistics from '../components/TransactionStatistics';
 
 import { scrollSepoliaDeployedAddress, mantleTestnetDeployedAddress } from '../constants';
-import koinuScrollSepoliaAbi from '../constants/KoinuScrollSepolia.json'
+import koinuMantleTestnetAbi from '../constants/KoinuMantleTestnet.json'
 import ProcessState from '../components/ProcessState';
 
 interface KoinuScrollSepoliaProps {
@@ -29,9 +29,9 @@ interface KoinuScrollSepoliaProps {
 }
 
 const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
-  const koinuScrollSepoliaContract = new ethers.Contract(
-    scrollSepoliaDeployedAddress, 
-    koinuScrollSepoliaAbi.abi, signer
+  const koinuMantleTestnetContract = new ethers.Contract(
+    mantleTestnetDeployedAddress, 
+    koinuMantleTestnetAbi.abi, signer
   );
 
   const [connectedAddress, setConnectedAddress] = useState('')
@@ -47,6 +47,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
   const [isMantleTestnetSelected, setIsMantleTestnetSelected] = useState(false);
   const [isSendToDifferentChainLoading, setIsSendToDifferentChainLoading] = useState(false)
   const [isSentToDifferentChain, setIsSentToDifferentChain] = useState(false)
+  const USDC_DECIMALS = 1e6
 
   const axelarGasSdk = new AxelarQueryAPI({
     environment: Environment.TESTNET,
@@ -89,7 +90,6 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
         signer,
         connectedAddress
       )
-      console.log("Mantle :", balance)
       setMantleTestnetBalance(balance)
     }
   }
@@ -108,14 +108,14 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
       const gmpParams = {
         showDetailedFees: true,
         transferAmount: inputValue.mantleTestnetBridgeAmount, 
-        destinationContractAddress: mantleTestnetDeployedAddress,
-        sourceContractAddress: scrollSepoliaDeployedAddress,
+        destinationContractAddress: scrollSepoliaDeployedAddress,
+        sourceContractAddress: mantleTestnetDeployedAddress,
         tokenSymbol: "aUSDC"
       }; 
   
       const gas = await axelarGasSdk.estimateGasFee(
-        EvmChain.BASE,
         EvmChain.MANTLE,
+        EvmChain.BASE,
         GasToken.ETH,
         700000,
         2,
@@ -124,17 +124,17 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
       );
   
       if (typeof gas !== 'string' && gas.baseFee && gas.executionFee) {
+        console.log('gas fee : ', Number(ethers.utils.formatUnits(Number(gas.baseFee) + Number(gas.executionFee))))
         setGasFee(Number(ethers.utils.formatUnits(Number(gas.baseFee) + Number(gas.executionFee))));
       } 
     } catch (error) {
-      console.error('Failed to fetch the gas fee');
+      console.error('Failed to fetch the gas fee', error);
     }
   };
 
   const queryAxelarTx = async (txHash: string) => {
     try {
       const txStatus: GMPStatusResponse = await axelarGmpSdk.queryTransactionStatus(txHash)
-      console.log(txStatus)
     } catch (error) {
       console.error(error)
     }
@@ -144,13 +144,15 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
     try {
       if (chainName === 'mantle') {
         setIsSendToDifferentChainLoading(true)
-        const send = await koinuScrollSepoliaContract.sendToDifferentChain(
-          chainName,
-          mantleTestnetDeployedAddress,
+        await switchToMantleTestnet(signer)
+        console.log('Switched')
+        const send = await koinuMantleTestnetContract.sendToDifferentChain(
+          'scroll',
+          scrollSepoliaDeployedAddress,
           'aUSDC',
-          inputValue.mantleTestnetBridgeAmount,
+          (inputValue.mantleTestnetBridgeAmount * USDC_DECIMALS),
           {
-            value: ethers.utils.parseEther(String(gasFee))
+            value: ethers.utils.parseEther(String(1))
           }
         )
 
@@ -284,7 +286,7 @@ const KoinuScrollSepolia: React.FC<KoinuScrollSepoliaProps> = ({ signer }) => {
 
                     <p className='text-gray-400 text-sm mt-7'>Gas Fee: {gasFee.toFixed(8)} ETH</p>
                     <button onClick={() => handleSendToDifferentChain('mantle')} className="font-extrabold bg-white hover:bg-gradient-to-l from-white via-orange-500 to-yellow-300 hover:animate-text w-[350px] transition-all duration-150 ease-in-out rounded-xl p-2 mt-7">
-                      Send to Mantle Testnet!!
+                      Bridge from Mantle to Scroll
                     </button>
                   </div>
                 </div>
