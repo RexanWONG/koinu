@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react';
 import KoinuScrollSepolia from "./lib/KoinuScrollSepolia";
+import KoinuMantleTestnet from './lib/KoinuMantleTestnet';
 
 const App = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -27,7 +28,7 @@ const App = () => {
   return (
     <div className='flex justify-center items-center h-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500 to-yellow-300'>
       {isWalletConnected ? (
-          <KoinuScrollSepolia 
+          <KoinuMantleTestnet
             signer={provider.getSigner()}
           />
         ) : (

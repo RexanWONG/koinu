@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { Web3Provider } from "@ethersproject/providers";
 import { 
     scrollSepoliaDeployedAddress, 
     scrollSepoliaAUSDCAddress, 
@@ -18,20 +19,78 @@ export const formatAUSDCBalance = (balance: number) => {
     return Number((balance/USDC_DECIMALS).toFixed(3))
 }
 
-export const switchToMantleTestnet = async (signer: any) => {
+export const switchToScrollSepolia = async (signer: any) => {
     try {
-        const newProvider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.mantle.xyz')
-        return newProvider.getSigner(await signer.getAddress())
+        const newProvider = new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/scroll_sepolia_testnet')
+        const address = await signer.getAddress()
+        console.log('switched', newProvider.getSigner(address))
+        return newProvider.getSigner(address)
     } catch (error) {
         console.error(error)
     }
 }
 
+export const switchChainWithSigner = async (signer: any, chainId: number) => {
+    try {
+      const provider = signer.provider;
+  
+      if (!provider) {
+        alert('Signer is not connected to a provider.');
+        return;
+      }
+  
+      const ethereum = (window as any).ethereum;
+  
+      if (typeof ethereum === 'undefined') {
+        alert('Please install MetaMask to use this feature.');
+        return;
+      }
+  
+      const targetChainId = `0x${chainId.toString(16)}`;
+  
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: targetChainId }],
+      });
+
+      const newProvider = new Web3Provider(ethereum);
+      return newProvider
+  
+    } catch (error) {
+        if (typeof error === "object" && error !== null && "code" in error) {
+          const switchError = error as { code: number, message?: string };
+    
+          // This error code indicates that the chain has not been added to MetaMask.
+          if (switchError.code === 4902) {
+            try {
+              await (window as any).ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${chainId.toString(16)}`,
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.error(addError);
+              alert('Failed to add the chain.');
+            }
+          } else {
+            console.error(switchError);
+            alert('Failed to switch chains.');
+          }
+        } else {
+          console.error(error);
+          alert('An unknown error occurred.');
+        }
+    }
+}
+
 export const fetchAUSDCBalance = async (chainName: string, signer: any, address: string) => {
     try {
-        if (chainName === 'scroll') {
+        if (chainName === 'mantle') {
             const ausdcContract = new ethers.Contract(
-                scrollSepoliaAUSDCAddress, 
+                mantleTestnetAUSDCAddress, 
                 ERC20_ABI, 
                 signer.provider
             );
@@ -40,12 +99,12 @@ export const fetchAUSDCBalance = async (chainName: string, signer: any, address:
             return balance.toNumber()
         }
 
-        if (chainName === 'mantle') {
-            const mantleTestnetProvider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.mantle.xyz')
+        if (chainName === 'scroll') {
+            const scrollSepoliaProvider = new ethers.providers.JsonRpcProvider('https://1rpc.io/scroll/sepolia')
             const ausdcContract = new ethers.Contract(
-                mantleTestnetAUSDCAddress, 
+                scrollSepoliaAUSDCAddress, 
                 ERC20_ABI, 
-                mantleTestnetProvider
+                scrollSepoliaProvider
             );
 
             const balance = await ausdcContract.balanceOf(address);

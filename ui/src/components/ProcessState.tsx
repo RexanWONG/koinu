@@ -7,7 +7,7 @@ interface ProcessStateProps {
     isSent: boolean;
     bridgeAmount: number;
     txHash: string;
-    backAction: () => void
+    backAction: () => void;
 }
 
 const ProcessState: React.FC<ProcessStateProps> = ({
@@ -22,17 +22,13 @@ const ProcessState: React.FC<ProcessStateProps> = ({
             <div className='flex flex-col items-center justify-center'>
                 <CheckAnimation />
                 <p className="text-center text-gray-400 mt-10">
-                🟢 Sent {bridgeAmount} aUSDC from mantle to scroll!
+                🟢 Sent {bridgeAmount} aUSDC from scroll to mantle!
                 </p>
 
                 <p className='text-white font-bold mt-2'>
                 🐾 Tx Hash : {truncateEthAddress(txHash)} 
                 <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
                 </p>
-
-                <a href={`https://testnet.mantlescan.org/tx/${txHash}`} target="_blank" className='text-white hover:underline mt-10'>
-                🦴 View your transaction on block explorer
-                </a>
 
                 <a href={`https://testnet.axelarscan.io/gmp/${txHash}`} target="_blank"className='text-white hover:underline mt-2'>
                 🦴 View your transaction on axelar testnet explorer
@@ -46,7 +42,7 @@ const ProcessState: React.FC<ProcessStateProps> = ({
             <div className='flex flex-col items-center justify-center'>
                 <DogAnimation />
                 <p className="text-center text-gray-400 mt-10">
-                    Sending {bridgeAmount} aUSDC from mantle to scroll!
+                    Sending {bridgeAmount} aUSDC from scroll to mantle!
                 </p>
 
                 <p className='text-white font-bold mt-2'>
@@ -54,12 +50,8 @@ const ProcessState: React.FC<ProcessStateProps> = ({
                     <span className='ml-2'><CopyToClipboard textToCopy={txHash} /></span>
                 </p>
 
-                <a href={`https://testnet.mantlescan.org/tx/${txHash}`} target="_blank" className='text-white hover:underline mt-10'>
-                🦴 Monitor your transaction on block explorer
-                </a>
-
                 <a href={`https://testnet.axelarscan.io/gmp/${txHash}`} target="_blank"className='text-white hover:underline mt-2'>
-                🦴 Monitor your transaction on axelar testnet explorer
+                    🦴 Monitor your transaction on axelar testnet explorer
                 </a>
             </div>
         )}
