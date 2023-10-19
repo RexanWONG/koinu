@@ -7,6 +7,7 @@ import {
     mantleTestnetAUSDCAddress,
     ERC20_ABI
 } from '../constants';
+import { Network } from 'alchemy-sdk';
 
 const WEI = 1e18;
 const USDC_DECIMALS = 1e6
@@ -53,8 +54,10 @@ export const switchChainWithSigner = async (signer: any, chainId: number) => {
         params: [{ chainId: targetChainId }],
       });
 
-      const newProvider = new Web3Provider(ethereum);
-      return newProvider
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      const newSigner = newProvider.getSigner()
+
+      return newSigner
   
     } catch (error) {
         if (typeof error === "object" && error !== null && "code" in error) {

@@ -6,7 +6,7 @@ import {
   EvmChain,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
-import { fetchAUSDCBalance, formatAUSDCBalance, switchChainWithSigner, switchToScrollSepolia } from '../utils';
+import { fetchAUSDCBalance, formatAUSDCBalance, switchChainWithSigner } from '../utils';
 
 import Box from '../components/Box'
 import BoxVerticalLine from '../components/BoxVerticalLine'
@@ -19,7 +19,7 @@ import ActionBar from '../components/ActionBar';
 import TransactionStatistics from '../components/TransactionStatistics';
 import ProcessState from '../components/ProcessState';
 
-import { scrollSepoliaDeployedAddress, mantleTestnetDeployedAddress, scrollSepoliaAUSDCAddress, ERC20_ABI } from '../constants/index';
+import { scrollSepoliaDeployedAddress, mantleTestnetDeployedAddress } from '../constants/index';
 import koinuScrollSepoliaABi from '../constants/KoinuScrollSepolia.json'
 
 interface KoinuMantleTestnetProps {
@@ -27,7 +27,6 @@ interface KoinuMantleTestnetProps {
 }
 
 const KoinuMantleTestnet: React.FC<KoinuMantleTestnetProps> = ({ signer }) => {
-
   const [connectedAddress, setConnectedAddress] = useState('')
   const [mantleTestnetBalance, setMantleTestnetBalance] = useState(0);
   const [scrollSepoliaBalance, setScrollSepoliaBalance] = useState(0)
@@ -123,27 +122,90 @@ const KoinuMantleTestnet: React.FC<KoinuMantleTestnetProps> = ({ signer }) => {
     }
   };
 
+  const switchChainWithSigner = async (signer: any, chainId: number) => {
+    try {
+      const provider = signer.provider;
+  
+      if (!provider) {
+        alert('Signer is not connected to a provider.');
+        return;
+      }
+  
+      const ethereum = (window as any).ethereum;
+  
+      if (typeof ethereum === 'undefined') {
+        alert('Please install MetaMask to use this feature.');
+        return;
+      }
+  
+      const targetChainId = `0x${chainId.toString(16)}`;
+  
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: targetChainId }],
+      });
+
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      const newSigner = newProvider.getSigner()
+
+      return newSigner
+  
+    } catch (error) {
+        if (typeof error === "object" && error !== null && "code" in error) {
+          const switchError = error as { code: number, message?: string };
+    
+          // This error code indicates that the chain has not been added to MetaMask.
+          if (switchError.code === 4902) {
+            try {
+              await (window as any).ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: `0x${chainId.toString(16)}`,
+                  },
+                ],
+              });
+            } catch (addError) {
+              console.error(addError);
+              alert('Failed to add the chain.');
+            }
+          } else {
+            console.error(switchError);
+            alert('Failed to switch chains.');
+          }
+        } else {
+          console.error(error);
+          alert('An unknown error occurred.');
+        }
+    }
+  }
+
   const handleSwitchChain = async (chainName: string) => {
     try {
       if (chainName === 'scroll') {
-        const newSigner = await switchChainWithSigner(signer, 534351)
-        signer = newSigner?.provider
-        setIsChainSwitched(true)
+        const newSigner = await switchChainWithSigner(signer, 534351);
+
+        signer = newSigner;
+        console.log(signer);
+        setIsChainSwitched(true);
       }
     } catch (error) {
-      alert(error)
+      alert(error);
     }
-  }
+  };
 
   const handleCrossChain = async (chainName: string) => {
     try {
       if (chainName === 'scroll') {
         try {
-          setIsSendToDifferentChainLoading(true)
+          const newProvider = new ethers.providers.Web3Provider(window.ethereum, "any")
+          const newSigner = newProvider.getSigner()
+
+          setIsSendToDifferentChainLoading(true);
           const koinuScrollSepoliaContract = new ethers.Contract(
-            scrollSepoliaDeployedAddress, 
-            koinuScrollSepoliaABi.abi, 
-            signer
+            scrollSepoliaDeployedAddress,
+            koinuScrollSepoliaABi.abi,
+            newSigner
           );
 
           const send = await koinuScrollSepoliaContract.sendToDifferentChain(
@@ -152,26 +214,25 @@ const KoinuMantleTestnet: React.FC<KoinuMantleTestnetProps> = ({ signer }) => {
             'aUSDC',
             (inputValue.scrollSepoliaBridgeAmount * USDC_DECIMALS),
             {
-              value: ethers.utils.parseEther(String(gasFee))
+              value: ethers.utils.parseEther(String(gasFee)),
             }
-          )
-
-          setTxHash(send.hash)
-          await send.wait()
-
-          setIsSendToDifferentChainLoading(false)
-          setIsSentToDifferentChain(true)
+          );
+  
+          setTxHash(send.hash);
+          await send.wait();
+  
+          setIsSendToDifferentChainLoading(false);
+          setIsSentToDifferentChain(true);
         } catch (error) {
-          setIsSendToDifferentChainLoading(false)
-          alert(error)
+          setIsSendToDifferentChainLoading(false);
+          alert(error);
         }
       }
-    
     } catch (error) {
-      setIsSendToDifferentChainLoading(false)
-      alert(error)
+      setIsSendToDifferentChainLoading(false);
+      alert(error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,6 +252,8 @@ const KoinuMantleTestnet: React.FC<KoinuMantleTestnetProps> = ({ signer }) => {
   useEffect(() => {
     getEstimatedGasMantleToScroll();
   }, [inputValue.scrollSepoliaBridgeAmount]);
+  
+  
   
   return (
     <Box isAllDataLoaded={isAllDataLoaded}>
