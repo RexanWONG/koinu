@@ -2,11 +2,18 @@ import { ethers } from 'ethers'
 import { useEffect, useState } from 'react';
 import KoinuScrollSepolia from "./lib/KoinuScrollSepolia";
 import KoinuMantleTestnet from './lib/KoinuMantleTestnet';
+import { fetchAUSDCBalance, formatAUSDCBalance } from './utils';
 
 const App = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const [isWalletConnected, setIsWalletConnected] = useState(false)
+  const [connectedAddress, setConnectedAddress] = useState('')
+  const [mantleBalance, setMantleBalance] = useState(0)
+
+  const [showKoinu, setShowKoinu] = useState(false)
+
+  const joinAmount = 500
 
   const checkIfWalletIsConnected = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -21,16 +28,66 @@ const App = () => {
     setIsWalletConnected(await checkIfWalletIsConnected())
   }
 
+  const fetchAddress = async () => {
+    try {
+      const signer = provider.getSigner()
+      const address = await signer.getAddress()
+      setConnectedAddress(address)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleFetchMantleBalance = async () => {
+    const balance = await fetchAUSDCBalance(
+      'mantle',
+      provider.getSigner(),
+      connectedAddress
+    )
+
+    console.log(balance)
+      
+    setMantleBalance(balance)
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected()
-  }, [window.ethereum, isWalletConnected, setIsWalletConnected])
+    fetchAddress()
+    handleFetchMantleBalance()
+  }, [window.ethereum, isWalletConnected, setIsWalletConnected, connectedAddress, setConnectedAddress])
 
   return (
-    <div className='flex justify-center items-center h-screen bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500 to-yellow-300'>
+    <div className='flex justify-center items-center h-screen bg-black'>
       {isWalletConnected ? (
-          <KoinuMantleTestnet
-            signer={provider.getSigner()}
-          />
+          <div className='flex flex-col items-center justify-center'>
+            <h1 className='text-2xl font-semibold tracking-tight text-white'>
+              Your wallet : {connectedAddress}
+            </h1>
+            {formatAUSDCBalance(mantleBalance) < 500 ? (
+              <div className='flex flex-col items-center justify-center'>
+                  <p className='scroll-m-20 text-xl tracking-tight text-white mt-10'>
+                    You have {formatAUSDCBalance(mantleBalance)} aUSDC on Mantle.  You need at least 500 aUSDC to join
+                  </p>
+
+                  <button onClick={() => setShowKoinu(true)} className="rounded-lg border-2 border-gray-700 px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out mt-5">
+                    Transfer aUSDC from a different chain?
+                  </button>
+              </div>
+            ) : (
+              <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-green hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
+                Join the DAO!!! Buy the NFT!!!
+              </button>
+            )}
+
+            {showKoinu ? (
+              <KoinuMantleTestnet
+                signer={provider.getSigner()}
+              />
+            ) : (
+              <div />
+            )}
+
+          </div>
         ) : (
           <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
             Connect Wallet
