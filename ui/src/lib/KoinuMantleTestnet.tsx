@@ -6,7 +6,7 @@ import {
   EvmChain,
   GasToken
 } from "@axelar-network/axelarjs-sdk";
-import { fetchAUSDCBalance, formatAUSDCBalance, switchChainWithSigner } from '../utils';
+import { fetchAUSDCBalance, formatAUSDCBalance } from '../utils';
 
 import Box from '../components/Box'
 import BoxVerticalLine from '../components/BoxVerticalLine'
