@@ -69,29 +69,37 @@ const App = () => {
                     You have {formatAUSDCBalance(mantleBalance)} aUSDC on Mantle.  You need at least 500 aUSDC to join
                   </p>
 
-                  <button onClick={() => setShowKoinu(true)} className="rounded-lg border-2 border-gray-700 px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out mt-5">
-                    Transfer aUSDC from a different chain?
-                  </button>
+                  {showKoinu ? (
+                    <div />
+                  ) : (
+                    <button onClick={() => setShowKoinu(true)} className="rounded-lg border-2 border-gray-700 px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out mt-5">
+                      Transfer aUSDC from a different chain?
+                    </button>
+                  )}
               </div>
             ) : (
               <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-green hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
-                Join the DAO!!! Buy the NFT!!!
+                Mantle!  Join the DAO!!! Buy the NFT!!!
               </button>
             )}
 
             {showKoinu ? (
-              <KoinuMantleTestnet
-                signer={provider.getSigner()}
-              />
+              <div className='mt-5'>
+                <KoinuMantleTestnet
+                  signer={provider.getSigner()}
+                />
+              </div>
             ) : (
               <div />
-            )}
-
+            )} 
           </div>
         ) : (
-          <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
-            Connect Wallet
-          </button>
+          <div className='flex flex-col items-center justify-center'>
+            <p className='text-white'>THIS DAPP IS ON MANTLE TESTENT</p>
+            <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
+              Connect Wallet
+            </button>
+          </div>
         )}
     </div>
   )
