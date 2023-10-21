@@ -1,6 +1,7 @@
 # koinu
 
 Submission for ETHGlobal Online 2023
+https://ethglobal.com/showcase/koinu-x8ced
 
 ## Axelar Bounty Submission Criteria : 
 AxelarScan link with a completed Interchain transaction : https://testnet.axelarscan.io/gmp/0x10bdd4d4bc96e4fc59fa165f76fe40be3706731e95cbe3db856fc809cc74f8bc
