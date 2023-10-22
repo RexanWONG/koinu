@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react';
-import KoinuScrollSepolia from "./lib/KoinuScrollSepolia";
 import KoinuMantleTestnet from './lib/KoinuMantleTestnet';
 import { fetchAUSDCBalance, formatAUSDCBalance } from './utils';
 
@@ -12,8 +11,6 @@ const App = () => {
   const [mantleBalance, setMantleBalance] = useState(0)
 
   const [showKoinu, setShowKoinu] = useState(false)
-
-  const joinAmount = 500
 
   const checkIfWalletIsConnected = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -83,7 +80,7 @@ const App = () => {
               </button>
             )}
 
-            {showKoinu ? (
+            {!showKoinu ? (
               <div className='mt-5'>
                 <KoinuMantleTestnet
                   signer={provider.getSigner()}
@@ -94,9 +91,12 @@ const App = () => {
             )} 
           </div>
         ) : (
-          <div className='flex flex-col items-center justify-center'>
+          <div className='flex flex-col items-center justify-center max-w-[500px]'>
+            <h1 className='text-5xl mb-5'>🐕</h1>
             <p className='text-white'>THIS DAPP IS ON MANTLE TESTENT</p>
-            <button onClick={connectWallet} className="rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out">
+            <p className='text-white mt-10'>Demo dapp showcasing one example of a powerul usecase of Koinu</p>
+            <p className='text-white mt-10 text-center'>To get the best demo experience, try having 0 aUSDC on Mantle Testnet and 500 aUSDC on Scroll Sepolia.  You can get aUSDC from the channel 'faucet' on Axelar's discord server</p>
+            <button onClick={connectWallet} className="border-2 border-gray-700 rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out mt-20">
               Connect Wallet
             </button>
           </div>
