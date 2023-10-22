@@ -96,6 +96,7 @@ const App = () => {
             <p className='text-white'>THIS DAPP IS ON MANTLE TESTENT</p>
             <p className='text-white mt-10'>Demo dapp showcasing one example of a powerul usecase of Koinu</p>
             <p className='text-white mt-10 text-center'>To get the best demo experience, try having 0 aUSDC on Mantle Testnet and 500 aUSDC on Scroll Sepolia.  You can get aUSDC from the channel 'faucet' on Axelar's discord server</p>
+            <p className='text-white mt-10 text-center'>Make sure you connect your wallet to mantle testnet</p>
             <button onClick={connectWallet} className="border-2 border-gray-700 rounded-lg px-3 py-2 cursor-pointer bg-black hover:bg-white text-white hover:text-black focus:outline-none shadow-lg shadow-neon transition duration-800 hover:ease-in-out mt-20">
               Connect Wallet
             </button>
