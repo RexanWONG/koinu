@@ -14,3 +14,7 @@ Positives :
 Negatives : 
 1. Need more example tutorials on how to get started with Axelar
 2. The solidity Axelar docs could be a bit more well documented
+
+remarks :
+1. Scroll : had a problem verifying the deployed contract with forge
+2. Mantle : Tweet : https://x.com/rexan_wong/status/1716264121866518674?s=46&t=1zpEm50Dvrnf-k-jkHFZxg
